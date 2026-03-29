@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import emp1.demo.StudentDto.StudentDto;
 import emp1.demo.service.StudentService;
@@ -15,48 +16,61 @@ import emp1.demo.service.StudentService;
 @Controller
 @RequestMapping("/students")
 public class StudentController {
+//--------------------
+	
+	@Autowired
+	private StudentService studentService;
 
-    @Autowired
-    private StudentService studentService;
+	@GetMapping
+	public String listStudents(Model model) {
+		model.addAttribute("students", studentService.getAll());
+		return "students"; // students.html
+	}
 
-    @GetMapping
-    public String listStudents(Model model) {
-        model.addAttribute("students", studentService.getAll());
-        return "students"; // students.html
-    }
+	@GetMapping("/add")
+	public String addStudentForm() {
+		return "addstudent";
+	}
 
-    @GetMapping("/add")
-    public String addStudentForm() {
-        return "addstudent";
-    }
-    
-    @PostMapping("/add")
-    public String save(@ModelAttribute StudentDto dto) {
-    	studentService.save(dto);
-    	return "redirect:/students";
-    	
-    }
-    
-    @PostMapping("/edit/{id}")
-    public String update(@PathVariable Long id,@ModelAttribute StudentDto dto) {
-    	studentService.update(id, dto);
-    	return "redirect:/students";
-    }
-    
+	@GetMapping("/ap1")
+	public String apap1() {
+		return "home";
+	}
 
-    @GetMapping("/edit/{id}")
-    public String editStudent(@PathVariable Long id, Model model) {
-        model.addAttribute("student", studentService.get(id));
-        return "editstudent";
-    }
-    
-    
+	@PostMapping("/add")
+	public String save(@ModelAttribute StudentDto dto, RedirectAttributes redirectAttributes) {
+		studentService.save(dto);
+		redirectAttributes.addFlashAttribute("message", dto.getFirstName() + " added successfully!");
+		return "redirect:/students";
 
-    @GetMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable Long id) {
-        studentService.delete(id);
-        return "redirect:/students";
-    }
+	}
+
+	@PostMapping("/edit/{id}")
+	public String update(@PathVariable Long id, @ModelAttribute StudentDto dto, RedirectAttributes redirectAttributes) {
+
+		studentService.update(id, dto);
+
+		redirectAttributes.addFlashAttribute("message", dto.getFirstName() + " updated successfully!");
+
+		return "redirect:/students";
+	}
+
+	@GetMapping("/edit/{id}")
+	public String editStudent(@PathVariable Long id, Model model) {
+		model.addAttribute("student", studentService.get(id));
+		return "editstudent";
+	}
+
+	@GetMapping("/delete/{id}")
+	public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+		StudentDto student = studentService.get(id); // get before delete
+
+		studentService.delete(id);
+
+		redirectAttributes.addFlashAttribute("message",   student.getFirstName() + " deleted successfully!");
+
+		return "redirect:/students";
+	}
 }
 
 //starting___

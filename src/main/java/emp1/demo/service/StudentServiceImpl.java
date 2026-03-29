@@ -12,59 +12,87 @@ import emp1.demo.repository.StudentRepository;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	@Autowired
-	private StudentRepository repo;
+    @Autowired
+    private StudentRepository repo;
 
-	@Override
-	public StudentDto save(StudentDto dto) {
+    @Override
+    public StudentDto save(StudentDto dto) {
 
-		Student s = new Student();
+        Student s = new Student();
 
-		s.setCourse(dto.getCourse());
-		s.setEmail(dto.getEmail());
-		
-		s.setName(dto.getName());
+        s.setFirstName(dto.getFirstName());
+        s.setLastName(dto.getLastName());
+        s.setCourse(dto.getCourse());
+        s.setGender(dto.getGender());
+        s.setDateOfBirth(dto.getDateOfBirth());
+        s.setAge(dto.getAge());
+        s.setPhoneNumber(dto.getPhoneNumber());
+        s.setEmail(dto.getEmail());
 
-		repo.save(s);
-		dto.setId(s.getId());
-		return dto;
+        repo.save(s);
 
-	}
+        dto.setId(s.getId());
+        return dto;
+    }
 
-	@Override
-	public StudentDto get(Long id) {
-		Student s = repo.findById(id).orElse(null);
+    @Override
+    public StudentDto get(Long id) {
+        Student s = repo.findById(id).orElse(null);
 
-		return new StudentDto(s.getId(), s.getName(), s.getCourse(), s.getEmail());
-	}
+        if (s == null) return null;
 
-	
-	@Override
-	public List<StudentDto> getAll() {
-		return repo.findAll().stream().map(s -> new StudentDto(s.getId(), s.getName(), s.getCourse(), s.getEmail()))
-				.toList();
-	}
+        return new StudentDto(
+                s.getId(),
+                s.getFirstName(),
+                s.getLastName(),
+                s.getCourse(),
+                s.getGender(),
+                s.getDateOfBirth(),
+                s.getAge(),
+                s.getPhoneNumber(),
+                s.getEmail()
+        );
+    }
 
-	
-	
-	@Override
-	public StudentDto update(Long id, StudentDto dto) {
-		Student s = repo.findById(id).orElseThrow();
-		s.setName(dto.getName());
-		s.setEmail(dto.getEmail());
-		s.setCourse(dto.getCourse());
-		repo.save(s);
-		dto.setId(id);
-		return dto;
-	}
+    @Override
+    public List<StudentDto> getAll() {
+        return repo.findAll().stream().map(s ->
+                new StudentDto(
+                        s.getId(),
+                        s.getFirstName(),
+                        s.getLastName(),
+                        s.getCourse(),
+                        s.getGender(),
+                        s.getDateOfBirth(),
+                        s.getAge(),
+                        s.getPhoneNumber(),
+                        s.getEmail()
+                )
+        ).toList();
+    }
 
-	
-	
-	@Override
-	public void delete(Long id) {
-		repo.deleteById(id);
-	}
+    @Override
+    public StudentDto update(Long id, StudentDto dto) {
 
-	
-	
+        Student s = repo.findById(id).orElseThrow();
+
+        s.setFirstName(dto.getFirstName());
+        s.setLastName(dto.getLastName());
+        s.setCourse(dto.getCourse());
+        s.setGender(dto.getGender());
+        s.setDateOfBirth(dto.getDateOfBirth());
+        s.setAge(dto.getAge());
+        s.setPhoneNumber(dto.getPhoneNumber());
+        s.setEmail(dto.getEmail());
+
+        repo.save(s);
+
+        dto.setId(id);
+        return dto;
+    }
+
+    @Override
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
 }

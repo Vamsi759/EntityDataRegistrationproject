@@ -1,108 +1,254 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <!-- Bootstrap 5 CDN -->
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-        rel="stylesheet">
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            background: #f5f7fa;
-        }
-        .container-custom {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
-            margin-top: 40px;
-        }
-        .heading {
-            background: linear-gradient(90deg, #d63384, #6f42c1);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-        .table-custom th {
-            background: #6f42c1 !important;
-            color: white !important;
-        }
-        .btn-add {
-            background: #d63384;
-            color: white;
-            font-weight: bold;
-        }
-        .btn-add:hover {
-            background: #b82a70;
-            color: white;
-        }
-    </style>
+<!-- ✅ Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+    background: #f5f7fa;
+}
+
+.container-custom {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+    margin-top: 20px;
+}
+
+.heading {
+    background: linear-gradient(90deg, #d63384, #6f42c1);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table-custom th {
+    background: #6f42c1 !important;
+    color: white !important;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+    word-break: break-word;
+}
+
+.btn-add {
+    background: #d63384;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-add:hover {
+    background: #b82a70;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .heading h2 {
+        font-size: 20px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .table {
+        font-size: 12px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<div class="container container-custom">
+<div class="container">
+    <div class="container-custom">
 
-    <div class="heading">
-        <h2>Student List</h2>
+        <div class="heading">
+            <h2>Home Page</h2>
+        </div>
+
+        <!-- ✅ ADD BUTTON WITH ICON -->
+        <div class="text-center mb-3">
+            <a th:href="@{/students/add}" class="btn btn-add">
+                <i class="bi bi-person-plus-fill"></i> Add Registration
+            </a>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-custom">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First</th>
+                        <th>Last</th>
+                        <th>Course</th>
+                        <th>Gender</th>
+                        <th>DOB</th>
+                        <th>Age</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="s : ${students}">
+                    <td th:text="${s.id}"></td>
+                    <td th:text="${s.firstName}"></td>
+                    <td th:text="${s.lastName}"></td>
+                    <td th:text="${s.course}"></td>
+                    <td th:text="${s.gender}"></td>
+                    <td th:text="${s.dateOfBirth}"></td>
+                    <td th:text="${s.age}"></td>
+                    <td th:text="${s.phoneNumber}"></td>
+                    <td th:text="${s.email}"></td>
+
+                    <td class="text-center">
+                        <div class="d-flex flex-column flex-md-row justify-content-center gap-1">
+
+                            <!-- ✏️ EDIT -->
+                            <button class="btn btn-sm btn-primary"
+                                    th:attr="data-id=${s.id}, data-name=${s.firstName + ' ' + s.lastName}"
+                                    onclick="openEditModal(this)">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </button>
+
+                            <!-- 🗑️ DELETE -->
+                            <button class="btn btn-sm btn-danger"
+                                    th:attr="data-id=${s.id}, data-name=${s.firstName + ' ' + s.lastName}"
+                                    onclick="openDeleteModal(this)">
+                                <i class="bi bi-trash-fill"></i> Delete
+                            </button>
+
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
+</div>
 
-    <div class="text-center mb-4">
-        <a th:href="@{/students/add}" class="btn btn-add">
-            + Add New Student
+<!-- EDIT MODAL -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+            <i class="bi bi-pencil"></i> Confirm Edit
+        </h5>
+      </div>
+      <div class="modal-body">
+        <p id="editMsg"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <a id="confirmEditBtn" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> Edit
         </a>
+      </div>
     </div>
+  </div>
+</div>
 
-   
+<!-- DELETE MODAL -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+            <i class="bi bi-exclamation-triangle"></i> Confirm Delete
+        </h5>
+      </div>
+      <div class="modal-body">
+        <p id="deleteMsg"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <a id="confirmDeleteBtn" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Delete
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <h4 class="text-center text-secondary mb-4">
-        Something about dev and code
-    </h4>
-
-    <!-- TABLE -->
-    <table class="table table-bordered table-striped table-hover table-custom">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Course</th>
-                <th>Email</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="s : ${students}">
-            <td th:text="${s.id}"></td>
-            <td th:text="${s.name}"></td>
-            <td th:text="${s.course}"></td>
-            <td th:text="${s.email}"></td>
-
-            <td class="text-center">
-                <a th:href="@{/students/edit/{id}(id=${s.id})}"
-                   class="btn btn-sm btn-primary me-2">
-                    Edit
-                </a>
-
-                <a th:href="@{/students/delete/{id}(id=${s.id})}"
-                   class="btn btn-sm btn-danger">
-                    Delete
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
+<!-- TOAST -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast" class="toast bg-success text-white" data-bs-delay="3000">
+        <div class="toast-body">
+            <i class="bi bi-check-circle"></i>
+            <span id="toastMsg"></span>
+        </div>
+    </div>
 </div>
 
 <!-- Bootstrap JS -->
-<script 
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- TOAST SCRIPT -->
+<script th:inline="javascript">
+    let message = [[${message}]];
+
+    if (message && message !== 'null') {
+        document.getElementById("toastMsg").innerText = message;
+        let toast = new bootstrap.Toast(document.getElementById("successToast"));
+        toast.show();
+    }
+</script>
+
+<!-- DELETE SCRIPT -->
+<script>
+function openDeleteModal(btn) {
+    let id = btn.getAttribute("data-id");
+    let name = btn.getAttribute("data-name");
+
+    document.getElementById("deleteMsg").innerText =
+        "Are you sure you want to delete " + name + "?";
+
+    document.getElementById("confirmDeleteBtn").href =
+        "/students/delete/" + id;
+
+    new bootstrap.Modal(document.getElementById("deleteModal")).show();
+}
+</script>
+
+<!-- EDIT SCRIPT -->
+<script>
+function openEditModal(btn) {
+    let id = btn.getAttribute("data-id");
+    let name = btn.getAttribute("data-name");
+
+    document.getElementById("editMsg").innerText =
+        "Do you want to edit " + name + "?";
+
+    document.getElementById("confirmEditBtn").href =
+        "/students/edit/" + id;
+
+    new bootstrap.Modal(document.getElementById("editModal")).show();
+}
 </script>
 
 </body>

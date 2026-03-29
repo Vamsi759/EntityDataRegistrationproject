@@ -1,168 +1,62 @@
 package emp1.demo.StudentDto;
 
-
+import java.time.LocalDate;
 
 public class StudentDto {
+
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String course;
+    private String gender;
+    private LocalDate dateOfBirth;
+    private Integer age;
+    private String phoneNumber;
     private String email;
-    
-    
-	public StudentDto(Long id2, String name2, String course2, String email2) {
-		// TODO Auto-generated constructor stub
-		id=id2;
-		name=name2;course=course2;email=email2;
-	}
-	public StudentDto() {
-		// TODO Auto-generated constructor stub
-		int apapapap=0;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getCourse() {
-		return course;
-	}
-	public void setCourse(String course) {
-		this.course = course;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-    
-   // --------
-	//--------
-	
+
+    // Constructors
+    public StudentDto() {}
+
+    public StudentDto(Long id, String firstName, String lastName, String course,
+                      String gender, LocalDate dateOfBirth, Integer age,
+                      String phoneNumber, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.course = course;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    // Getters & Setters
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getCourse() { return course; }
+    public void setCourse(String course) { this.course = course; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+
+    public Integer getAge() { return age; }
+    public void setAge(Integer age) { this.age = age; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 }
-
-
-/*
-
-
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-
-    <!-- Bootstrap 5 CDN -->
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-        rel="stylesheet">
-
-    <style>
-        body {
-            background: #f5f7fa;
-        }
-        .container-custom {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
-            margin-top: 40px;
-        }
-        .heading {
-            background: linear-gradient(90deg, #d63384, #6f42c1);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-        .table-custom th {
-            background: #6f42c1 !important;
-            color: white !important;
-        }
-        .btn-add {
-            background: #d63384;
-            color: white;
-            font-weight: bold;
-        }
-        .btn-add:hover {
-            background: #b82a70;
-            color: white;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container container-custom">
-
-    <div class="heading">
-        <h2>Student List</h2>
-    </div>
-
-    <div class="text-center mb-4">
-        <a th:href="@{/students/add}" class="btn btn-add">
-            + Add New Student
-        </a>
-    </div>
-
-    <a th:href="@{/students/den}" class="btn btn-add mb-3">
-        + Add Student
-    </a>
-
-    <h4 class="text-center text-secondary mb-4">
-        Something about dev and code
-    </h4>
-
-    <!-- TABLE -->
-    <table class="table table-bordered table-striped table-hover table-custom">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Course</th>
-                <th>Email</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="s : ${students}">
-            <td th:text="${s.id}"></td>
-            <td th:text="${s.name}"></td>
-            <td th:text="${s.course}"></td>
-            <td th:text="${s.email}"></td>
-
-            <td class="text-center">
-                <a th:href="@{/students/edit/{id}(id=${s.id})}"
-                   class="btn btn-sm btn-primary me-2">
-                    Edit
-                </a>
-
-                <a th:href="@{/students/delete/{id}(id=${s.id})}"
-                   class="btn btn-sm btn-danger">
-                    Delete
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-</div>
-
-<!-- Bootstrap JS -->
-<script 
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-</script>
-
-</body>
-</html>
-
-
-*/

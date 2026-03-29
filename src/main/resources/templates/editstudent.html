@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
 
@@ -15,7 +16,6 @@
             border: 1px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: center;
         }
 
         .form-control {
@@ -25,6 +25,7 @@
         h2 {
             margin-bottom: 20px;
             font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
@@ -32,28 +33,60 @@
 <body class="bg-light">
 
 <div class="ap">
-    <h2>Edit Student</h2>
+    <h2>Edit Details</h2>
 
     <form th:action="@{/students/edit/{id}(id=${student.id})}" method="post">
 
-        Name:
-        <input type="text" name="name" class="form-control"
-               th:value="${student.name}" required>
+        <!-- First Name -->
+        <input type="text" name="firstName" class="form-control"
+               th:value="${student.firstName}" placeholder="First Name" required>
 
-        Course:
+        <!-- Last Name -->
+        <input type="text" name="lastName" class="form-control"
+               th:value="${student.lastName}" placeholder="Last Name" required>
+
+        <!-- Course -->
         <input type="text" name="course" class="form-control"
-               th:value="${student.course}" required>
+               th:value="${student.course}" placeholder="Course" required>
 
-        Email:
+        <!-- Gender -->
+        <div class="mb-3 text-start">
+            <label class="fw-bold">Gender:</label><br>
+
+            <input type="radio" name="gender" value="Male"
+                   th:checked="${student.gender == 'Male'}"> Male
+
+            &nbsp;&nbsp;
+
+            <input type="radio" name="gender" value="Female"
+                   th:checked="${student.gender == 'Female'}"> Female
+        </div>
+
+        <!-- Date of Birth -->
+        <input type="date" name="dateOfBirth" class="form-control"
+               th:value="${student.dateOfBirth}" required>
+
+        <!-- Age -->
+        <input type="number" name="age" class="form-control"
+               th:value="${student.age}" placeholder="Age" required>
+
+        <!-- Phone -->
+        <input type="text" name="phoneNumber" class="form-control"
+               th:value="${student.phoneNumber}" placeholder="Phone Number" required>
+
+        <!-- Email -->
         <input type="email" name="email" class="form-control"
-               th:value="${student.email}" required>
+               th:value="${student.email}" placeholder="Email" required>
 
+        <!-- Submit -->
         <button type="submit" class="btn btn-success w-100 mt-2">
             Update
         </button>
+
     </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
